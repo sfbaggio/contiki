@@ -154,7 +154,7 @@ main(void)
 
   lpm_init();
 
-  board_init();
+  board_init();//ados assim que o Contiki for iniciali-zado.3.Compile o arquivo. Observe que na configura ̧c ̃ao atual o arquivo atividade3.c n ̃ao ser ́acompilado pois n ̃ao est ́a adicionado no Makefile. Adicione-o: Leia [1, Se ̧c ̃ao 3.5.2];4.Grave a aplica ̧c ̃ao no kit de desenvolvimento da disciplina e observe a sa ́ıda da portaserial utilizan
 
   gpio_interrupt_init();
 
@@ -175,7 +175,7 @@ main(void)
   soc_rtc_init();
   clock_init();
   rtimer_init();
-  watchdog_init();
+  watchdog_init();//ados assim que o Contiki for iniciali-zado.3.Compile o arquivo. Observe que na configura ̧c ̃ao atual o arquivo atividade3.c n ̃ao ser ́acompilado pois n ̃ao est ́a adicionado no Makefile. Adicione-o: Leia [1, Se ̧c ̃ao 3.5.2];4.Grave a aplica ̧c ̃ao no kit de desenvolvimento da disciplina e observe a sa ́ıda da portaserial utilizan
   process_init();
 
   random_init(0x1234);

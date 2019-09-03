@@ -39,8 +39,13 @@
 #define DEBUG DEBUG_PRINT
 #include "net/ip/uip-debug.h"
 
-#define SEND_INTERVAL		(5 * CLOCK_SECOND)
-#define MAX_PAYLOAD_LEN		(40)
+#define LED_TOGGLE_REQUEST (0x79)
+#define LED_SET_STATE (0x7A)
+#define LED_GET_STATE (0x7B)
+#define LED_STATE (0x7C)
+
+#define SEND_INTERVAL	(5 * CLOCK_SECOND)
+#define MAX_PAYLOAD_LEN	(40)
 #define CONN_PORT     (8802)
 #define MDNS (1)
 #define LED_TOGGLE_REQUEST (0x79)
@@ -65,6 +70,24 @@ tcpip_handler(void)
         dados = uip_appdata;
         dados[uip_datalen()] = '\0';
         printf("Response from the server: '%s'\n", dados);
+        switch(dados[0])
+        {
+        case LED_GET_STATE:
+        {
+            buf[0] = LED_STATE;
+            buf[1] = leds_get();
+            uip_udp_packet_send(client_conn, buf, 2);
+            break;
+        }
+        case LED_SET_STATE:
+        {
+            leds_set(dados[1]);
+            buf[0] = LED_STATE;
+            buf[1] = leds_get();
+            uip_udp_packet_send(client_conn, buf, 2);
+        break;
+        }
+        }
     }
 }
 /*---------------------------------------------------------------------------*/
@@ -81,7 +104,7 @@ timeout_handler(void)
     PRINTF("Enviando LED_TOGGLE_REQUEST para [");
     PRINT6ADDR(&client_conn->ripaddr);
     PRINTF("]:%u\n", UIP_HTONS(client_conn->rport));
-    uip_udp_packet_send(client_conn, buf, strlen(buf));
+    uip_udp_packet_send(client_conn, buf, 1);
 }
 /*---------------------------------------------------------------------------*/
 static void
